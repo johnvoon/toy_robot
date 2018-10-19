@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'toy_robot'
+
+toy_robot = ToyRobot::Robot.new  
+toy_robot.greeting
