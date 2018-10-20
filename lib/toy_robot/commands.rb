@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'ostruct'
 require 'toy_robot/robot'
 
 module ToyRobot
@@ -25,7 +26,14 @@ module ToyRobot
                                             .split(' ')[1]
                                             .split(',')
 
-        ToyRobot::Robot.new([x_position.to_i, y_position.to_i], direction)
+        if [x_position.to_i, y_position.to_i].all? { |position| (0..4).cover?(position) }
+          OpenStruct.new(
+            success?: true,
+            data: ToyRobot::Robot.new([x_position.to_i, y_position.to_i], direction)
+          )
+        else
+          OpenStruct.new(success?: false)
+        end
       end
 
       def report(state)
@@ -46,7 +54,7 @@ module ToyRobot
                             .zip(MOVEMENTS[direction])
                             .map do |operands|
           sum = operands.sum
-          sum.abs <= 5 ? sum : operands[0]
+          (0..4).cover?(sum) ? sum : operands[0]
         end
         copy_of_state[:robot] = ToyRobot::Robot.new(new_position, direction)
 

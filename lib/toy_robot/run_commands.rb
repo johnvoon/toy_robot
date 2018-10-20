@@ -23,9 +23,13 @@ module ToyRobot
         
         head, *tail = commands.split("\n")
         if head.include? 'PLACE'
+          place_result = ToyRobot::Commands.place(head)
+          message = 'Toy Robot must be placed within bounds (5 x 5).'
+          return OpenStruct.new(success?: false, message: message) unless place_result.success?
+          
           initial_state = {
             reported_state: [],
-            robot: ToyRobot::Commands.place(head)
+            robot: place_result.data
           }
         else
           message = 'Toy Robot has not yet been placed. Please ensure the PLACE command has been issued first.'
@@ -35,8 +39,16 @@ module ToyRobot
         final_state = tail.reduce(initial_state) do |current_state, command|
           callable = COMMAND_MAP[command]
           next current_state if callable.nil?
-          
-          callable.call(current_state)
+          if command.include? 'PLACE'
+            place_result = ToyRobot::Commands.place(head)
+            next current_state unless place_result.success?
+
+            copy_of_current_state = deep_copy current_state
+            copy_of_current_state[:robot] = place_result.data
+            copy_of_current_state
+          else
+            callable.call(current_state)
+          end
         end
 
         if final_state[:reported_state].empty?

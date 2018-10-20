@@ -5,18 +5,29 @@ require 'toy_robot/robot'
 
 RSpec.describe ToyRobot::Commands do
   describe 'place' do
-    {
-      'PLACE 0,0,NORTH' => ToyRobot::Robot.new([0, 0], 'NORTH'),
-      'PLACE 1,2,EAST' => ToyRobot::Robot.new([1, 2], 'EAST')
-    }.each do |command, expected_robot|
-      it "returns ToyRobot::Robot facing #{expected_robot.direction} given #{command}" do
-        new_robot = ToyRobot::Commands.place(command)
-        expect(new_robot.direction).to eq(expected_robot.direction)
+    context 'valid placement made' do
+      {
+        'PLACE 0,0,NORTH' => ToyRobot::Robot.new([0, 0], 'NORTH'),
+        'PLACE 1,2,EAST' => ToyRobot::Robot.new([1, 2], 'EAST')
+      }.each do |command, expected_robot|
+        it "returns ToyRobot::Robot facing #{expected_robot.direction} given #{command}" do
+          new_robot = ToyRobot::Commands.place(command).data
+          expect(new_robot.direction).to eq(expected_robot.direction)
+        end
+  
+        it "returns ToyRobot::Robot set at #{expected_robot.position} given #{command}" do
+          new_robot = ToyRobot::Commands.place(command).data
+          expect(new_robot.position).to eq(expected_robot.position)
+        end
       end
+    end
 
-      it "returns ToyRobot::Robot set at #{expected_robot.position} given #{command}" do
-        new_robot = ToyRobot::Commands.place(command)
-        expect(new_robot.position).to eq(expected_robot.position)
+    context 'invalid placement made' do
+      ['PLACE 0,5,NORTH', 'PLACE -1,2,EAST'].each do |command|
+        it "returns result object with success? attribute as false" do
+          result = ToyRobot::Commands.place(command)
+          expect(result.success?).to eq(false)
+        end
       end
     end
   end
@@ -56,20 +67,28 @@ RSpec.describe ToyRobot::Commands do
     context 'when move is invalid' do
       [
         [
-          { reported_state: [], robot: ToyRobot::Robot.new([0, 5], 'NORTH') },
-          { reported_state: [], robot: ToyRobot::Robot.new([0, 5], 'NORTH') }
+          { reported_state: [], robot: ToyRobot::Robot.new([0, 4], 'NORTH') },
+          { reported_state: [], robot: ToyRobot::Robot.new([0, 4], 'NORTH') }
         ],
         [
-          { reported_state: [], robot: ToyRobot::Robot.new([-5, 0], 'WEST') },
-          { reported_state: [], robot: ToyRobot::Robot.new([-5, 0], 'WEST') }
+          { reported_state: [], robot: ToyRobot::Robot.new([0, 2], 'WEST') },
+          { reported_state: [], robot: ToyRobot::Robot.new([0, 2], 'WEST') }
         ],
         [
-          { reported_state: [], robot: ToyRobot::Robot.new([5, 1], 'EAST') },
-          { reported_state: [], robot: ToyRobot::Robot.new([5, 1], 'EAST') }
+          { reported_state: [], robot: ToyRobot::Robot.new([2, 0], 'SOUTH') },
+          { reported_state: [], robot: ToyRobot::Robot.new([2, 0], 'SOUTH') }
         ],
         [
-          { reported_state: [], robot: ToyRobot::Robot.new([0, -5], 'SOUTH') },
-          { reported_state: [], robot: ToyRobot::Robot.new([0, -5], 'SOUTH') }
+          { reported_state: [], robot: ToyRobot::Robot.new([4, 0], 'EAST') },
+          { reported_state: [], robot: ToyRobot::Robot.new([4, 0], 'EAST') }
+        ],
+        [
+          { reported_state: [], robot: ToyRobot::Robot.new([4, 4], 'NORTH') },
+          { reported_state: [], robot: ToyRobot::Robot.new([4, 4], 'NORTH') }
+        ],
+        [
+          { reported_state: [], robot: ToyRobot::Robot.new([0, 0], 'SOUTH') },
+          { reported_state: [], robot: ToyRobot::Robot.new([0, 0], 'SOUTH') }
         ]
       ].each do |initial_state, expected_state|
         it "returns ToyRobot::Robot object in position #{expected_state[:robot].position}" do

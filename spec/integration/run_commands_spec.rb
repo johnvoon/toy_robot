@@ -46,6 +46,15 @@ RSpec.describe ToyRobot::RunCommands do
       end
     end
 
+    context 'Toy Robot is placed out of bounds' do
+      it 'returns result object with success? property as false' do
+        commands = "PLACE 0,5,NORTH\nMOVE\nMOVE\nLEFT\nMOVE"
+        result = ToyRobot::RunCommands.call(commands)
+
+        expect(result.success?).to eq(false)
+      end
+    end
+
     context 'No commands issued' do
       it 'returns result object with success? property equal to false' do
         commands = ''
@@ -58,6 +67,17 @@ RSpec.describe ToyRobot::RunCommands do
     context 'Commands intermingled with rubbish input' do
       {
         "PLACE 0,0,NORTH\n&*$%^&%&_input\nREPORT\nMOVE\nREPORT" => "0,0,NORTH\n0,1,NORTH"
+      }.each do |commands, output|
+        it "returns #{output} given #{commands}" do
+          result = ToyRobot::RunCommands.call(commands)
+          expect(result.data).to eq(output)
+        end
+      end
+    end
+
+    context 'Commands intermingled with out of bound placement' do
+      {
+        "PLACE 0,0,NORTH\nPLACE 0,5,NORTH\nREPORT\nMOVE\nREPORT" => "0,0,NORTH\n0,1,NORTH"
       }.each do |commands, output|
         it "returns #{output} given #{commands}" do
           result = ToyRobot::RunCommands.call(commands)
