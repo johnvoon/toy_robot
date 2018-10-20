@@ -22,7 +22,7 @@ Create a file with Toy Robot commands, e.g.:
     MOVE
     REPORT
 
-And then run the program, passing in the filename as an argument. E.g. if the file is `commands.txt`. An error is returned if a filename is not given:
+And then run the program, passing in the filename as an argument. E.g. if the file is `commands.txt`:
 
     bin/toy_robot commands.txt
 
