@@ -54,5 +54,16 @@ RSpec.describe ToyRobot::RunCommands do
         expect(result.success?).to eq(false)
       end
     end
+
+    context 'Commands intermingled with rubbish input' do
+      {
+        "PLACE 0,0,NORTH\n&*$%^&%&_input\nREPORT\nMOVE\nREPORT" => "0,0,NORTH\n0,1,NORTH"
+      }.each do |commands, output|
+        it "returns #{output} given #{commands}" do
+          result = ToyRobot::RunCommands.call(commands)
+          expect(result.data).to eq(output)
+        end
+      end
+    end
   end
 end

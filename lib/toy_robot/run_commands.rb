@@ -33,7 +33,10 @@ module ToyRobot
         end
 
         final_state = tail.reduce(initial_state) do |current_state, command|
-          COMMAND_MAP[command].call(current_state)
+          callable = COMMAND_MAP[command]
+          next current_state if callable.nil?
+          
+          callable.call(current_state)
         end
 
         if final_state[:reported_state].empty?
