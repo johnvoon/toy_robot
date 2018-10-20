@@ -11,7 +11,8 @@ RSpec.describe ToyRobot::RunCommands do
       "PLACE 1,2,EAST\nMOVE\nMOVE\nLEFT\nMOVE\nREPORT" => '3,3,NORTH'
     }.each do |commands, output|
       it "returns #{output} given #{commands}" do
-        expect(ToyRobot::RunCommands.call(commands)).to eq(output)
+        result = ToyRobot::RunCommands.call(commands)
+        expect(result.data).to eq(output)
       end
     end
 
@@ -21,14 +22,27 @@ RSpec.describe ToyRobot::RunCommands do
       "PLACE 1,2,EAST\nMOVE\nREPORT\nMOVE\nLEFT\nMOVE\nREPORT" => "2,2,EAST\n3,3,NORTH"
     }.each do |commands, output|
       it "returns #{output} given #{commands}" do
-        expect(ToyRobot::RunCommands.call(commands)).to eq(output)
+        result = ToyRobot::RunCommands.call(commands)
+        expect(result.data).to eq(output)
       end
     end
 
     context 'when Toy Robot is not placed and last position reported' do
       it 'returns nil' do
         commands = "MOVE\nMOVE\nLEFT\nMOVE\nREPORT"
-        expect(ToyRobot::RunCommands.call(commands)).to eq(nil)
+        result = ToyRobot::RunCommands.call(commands)
+      
+        expect(result.success?).to eq(false)
+      end
+    end
+
+    context 'Toy Robot is placed and last position not reported' do
+      it 'returns result object with data property as nil' do
+        commands = "PLACE 0,0,NORTH\nMOVE\nMOVE\nLEFT\nMOVE"
+        result = ToyRobot::RunCommands.call(commands)
+      
+        expect(result.success?).to eq(false)
+        expect(result.data).to eq(nil)
       end
     end
   end

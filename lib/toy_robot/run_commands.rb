@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
+require 'ostruct'
 require 'toy_robot/commands'
+require 'toy_robot/toy_robot_error'
 
 module ToyRobot
   class RunCommands
@@ -19,15 +21,19 @@ module ToyRobot
           robot: ToyRobot::Commands.place(head)
         }
       else
-        puts 'Toy Robot has not yet been placed. Please issue the PLACE command'
-        return nil
+        message = 'Toy Robot has not yet been placed. Please ensure the PLACE command has been issued first.'
+        return OpenStruct.new(success?: false, message: message)
       end
 
       final_state = tail.reduce(initial_state) do |current_state, command|
         COMMAND_MAP[command].call(current_state)
       end
 
-      final_state[:reported_state].join("\n")
+      if final_state[:reported_state].empty?
+        OpenStruct.new(success?: false, data: nil, message: "No final state was reported")
+      else
+        OpenStruct.new(success?: true, data: final_state[:reported_state].join("\n"))
+      end
     end
 
     private

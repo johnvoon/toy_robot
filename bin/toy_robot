@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 require 'toy_robot'
+require 'toy_robot/toy_robot_error'
 
-toy_robot = ToyRobot::Robot.new  
-toy_robot.greeting
+ToyRobot.run(ARGV)
+
