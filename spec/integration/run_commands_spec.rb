@@ -31,7 +31,7 @@ RSpec.describe ToyRobot::RunCommands do
       it 'returns nil' do
         commands = "MOVE\nMOVE\nLEFT\nMOVE\nREPORT"
         result = ToyRobot::RunCommands.call(commands)
-      
+
         expect(result.success?).to eq(false)
       end
     end
@@ -40,7 +40,7 @@ RSpec.describe ToyRobot::RunCommands do
       it 'returns result object with data property as nil' do
         commands = "PLACE 0,0,NORTH\nMOVE\nMOVE\nLEFT\nMOVE"
         result = ToyRobot::RunCommands.call(commands)
-      
+
         expect(result.success?).to eq(false)
         expect(result.data).to eq(nil)
       end

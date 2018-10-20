@@ -30,7 +30,7 @@ module ToyRobot
       end
 
       if final_state[:reported_state].empty?
-        OpenStruct.new(success?: false, data: nil, message: "No final state was reported")
+        OpenStruct.new(success?: false, data: nil, message: 'No final state was reported')
       else
         OpenStruct.new(success?: true, data: final_state[:reported_state].join("\n"))
       end

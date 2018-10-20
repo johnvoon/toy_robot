@@ -5,4 +5,3 @@ require 'toy_robot'
 require 'toy_robot/toy_robot_error'
 
 ToyRobot.run(ARGV)
-
