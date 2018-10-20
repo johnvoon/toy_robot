@@ -19,6 +19,8 @@ module ToyRobot
 
     class << self
       def call(commands)
+        return OpenStruct.new(success?: false, message: 'No commands were issued.') if commands.empty?
+        
         head, *tail = commands.split("\n")
         if head.include? 'PLACE'
           initial_state = {

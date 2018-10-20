@@ -45,5 +45,14 @@ RSpec.describe ToyRobot::RunCommands do
         expect(result.data).to eq(nil)
       end
     end
+
+    context 'No commands issued' do
+      it 'returns result object with success? property equal to false' do
+        commands = ''
+        result = ToyRobot::RunCommands.call(commands)
+
+        expect(result.success?).to eq(false)
+      end
+    end
   end
 end
