@@ -1,25 +1,27 @@
-require "toy_robot/robot"
+# frozen_string_literal: true
+
+require 'toy_robot/robot'
 
 module ToyRobot
   module Commands
-    MOVEMENTS = { 
-      "NORTH" => [0, 1],
-      "SOUTH" => [0, -1],
-      "EAST" => [1, 0],
-      "WEST" => [-1, 0]
-    }
+    MOVEMENTS = {
+      'NORTH' => [0, 1],
+      'SOUTH' => [0, -1],
+      'EAST' => [1, 0],
+      'WEST' => [-1, 0]
+    }.freeze
 
     DIRECTION_CHANGES = {
-      "NORTH" => ["WEST", "EAST"],
-      "SOUTH" => ["EAST", "WEST"],
-      "EAST" => ["NORTH", "SOUTH"],
-      "WEST" => ["SOUTH", "NORTH"]
-    }
+      'NORTH' => %w[WEST EAST],
+      'SOUTH' => %w[EAST WEST],
+      'EAST' => %w[NORTH SOUTH],
+      'WEST' => %w[SOUTH NORTH]
+    }.freeze
 
     def self.place(command)
       x_position, y_position, direction = command
-        .split(" ")[1]
-        .split(",")
+                                          .split(' ')[1]
+                                          .split(',')
 
       ToyRobot::Robot.new([x_position.to_i, y_position.to_i], direction)
     end
@@ -39,13 +41,13 @@ module ToyRobot
       robot = copy_of_state[:robot]
       direction = copy_of_state[:robot].direction
       new_position = copy_of_state[:robot].position
-        .zip(MOVEMENTS[direction])
-        .map do |operands|
-          sum = operands.sum
-          sum.abs <= 5 ? sum : operands[0]
-        end
+                                          .zip(MOVEMENTS[direction])
+                                          .map do |operands|
+        sum = operands.sum
+        sum.abs <= 5 ? sum : operands[0]
+      end
       copy_of_state[:robot] = ToyRobot::Robot.new(new_position, direction)
-      
+
       copy_of_state
     end
 
@@ -57,7 +59,7 @@ module ToyRobot
       new_direction = DIRECTION_CHANGES[current_direction][0]
       copy_of_state[:robot] = ToyRobot::Robot.new(position, new_direction)
 
-      copy_of_state      
+      copy_of_state
     end
 
     def self.rotate_right(state)
@@ -68,7 +70,7 @@ module ToyRobot
       new_direction = DIRECTION_CHANGES[current_direction][1]
       copy_of_state[:robot] = ToyRobot::Robot.new(position, new_direction)
 
-      copy_of_state      
+      copy_of_state
     end
 
     private
