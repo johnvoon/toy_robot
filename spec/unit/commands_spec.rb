@@ -11,12 +11,12 @@ RSpec.describe ToyRobot::Commands do
     }.each do |command, expected_robot|
       it "returns ToyRobot::Robot facing #{expected_robot.direction} given #{command}" do
         new_robot = ToyRobot::Commands.place(command)
-        expect(expected_robot.direction).to eq(expected_robot.direction)
+        expect(new_robot.direction).to eq(expected_robot.direction)
       end
 
       it "returns ToyRobot::Robot set at #{expected_robot.position} given #{command}" do
         new_robot = ToyRobot::Commands.place(command)
-        expect(expected_robot.position).to eq(expected_robot.position)
+        expect(new_robot.position).to eq(expected_robot.position)
       end
     end
   end
