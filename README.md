@@ -17,6 +17,8 @@ And then execute:
 Create a file with Toy Robot commands, e.g.:
 
     PLACE 0,0,NORTH
+    LEFT
+    RIGHT
     MOVE
     REPORT
 
