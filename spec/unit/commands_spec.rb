@@ -58,16 +58,16 @@ RSpec.describe ToyRobot::Commands do
           { reported_state: [], robot: ToyRobot::Robot.new([0,5], "NORTH") }
         ],
         [
-          { reported_state: [], robot: ToyRobot::Robot.new([0,1], "WEST") },
-          { reported_state: [], robot: ToyRobot::Robot.new([0,1], "WEST") }
+          { reported_state: [], robot: ToyRobot::Robot.new([-5,0], "WEST") },
+          { reported_state: [], robot: ToyRobot::Robot.new([-5,0], "WEST") }
         ],
         [
           { reported_state: [], robot: ToyRobot::Robot.new([5,1], "EAST") },
           { reported_state: [], robot: ToyRobot::Robot.new([5,1], "EAST") }
         ],
         [
-          { reported_state: [], robot: ToyRobot::Robot.new([0,1], "SOUTH") },
-          { reported_state: [], robot: ToyRobot::Robot.new([0,1], "SOUTH") }
+          { reported_state: [], robot: ToyRobot::Robot.new([0,-5], "SOUTH") },
+          { reported_state: [], robot: ToyRobot::Robot.new([0,-5], "SOUTH") }
         ]
       ].each do |initial_state, expected_state|
         it "returns ToyRobot::Robot object in position #{expected_state[:robot].position.to_s}" do
@@ -107,7 +107,7 @@ RSpec.describe ToyRobot::Commands do
           new_state = ToyRobot::Commands.rotate_left(initial_state)
           expect(new_state[:robot].position).to eq(expected_state[:robot].position)
         end
-
+        
         it "returns ToyRobot::Robot facing #{expected_state[:robot].direction}" do
           new_state = ToyRobot::Commands.rotate_left(initial_state)
           expect(new_state[:robot].direction).to eq(expected_state[:robot].direction)
