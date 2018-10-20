@@ -1,5 +1,4 @@
 require "toy_robot/robot"
-require "pry"
 
 module ToyRobot
   module Commands
@@ -22,7 +21,7 @@ module ToyRobot
         .split(" ")[1]
         .split(",")
 
-      ToyRobot::Robot.new([x_position, y_position], direction)
+      ToyRobot::Robot.new([x_position.to_i, y_position.to_i], direction)
     end
 
     def self.report(state)
@@ -46,6 +45,7 @@ module ToyRobot
           sum.abs <= 5 ? sum : operands[0]
         end
       copy_of_state[:robot] = ToyRobot::Robot.new(new_position, direction)
+      
       copy_of_state
     end
 
